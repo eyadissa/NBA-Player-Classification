@@ -33,12 +33,13 @@ def fetch_and_merge_team_stats(season):
 def compile_stats_across_seasons(start_year, end_year):
     all_seasons_merged_data = pd.DataFrame()
     for year in range(start_year, end_year + 1):
-        season = f"{year}-{str(year+1)[-2:]}"
+        season = year
+        #f"{year}-{str(year+1)[-2:]}" as of 3/12/2024 NBA_API expects seaon= the start year
         print(f"Compiling stats for season: {season}")
         season_merged_stats = fetch_and_merge_team_stats(season)
         all_seasons_merged_data = pd.concat([all_seasons_merged_data, season_merged_stats], ignore_index=True)
     return all_seasons_merged_data
 
 compiled_data = compile_stats_across_seasons(2017, 2023)
-csv_file_path = '../data/MSDS_422_FinalProject_Team_Stats_with_Four_Factors.csv'
+csv_file_path = '../data/17-23_allTeam_Stats_with_Four_Factors.csv'
 compiled_data.to_csv(csv_file_path, index=False)
