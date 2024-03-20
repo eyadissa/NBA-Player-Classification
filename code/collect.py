@@ -7,9 +7,8 @@ def fetch_player_stats(season, per_mode='PerGame', measure_type='Base'):
                         per_mode_detailed=per_mode,
                         measure_type_detailed_defense=measure_type
                     ).get_data_frames()[0]
-    
-
-    player_stats['Season'] = season[:4]
+    print(player_stats)
+    player_stats['Season'] = season
     
     player_stats['unique_id'] = player_stats['PLAYER_ID'].astype(str) + "_" + player_stats['Season']
     
@@ -31,12 +30,13 @@ def compile_and_merge_stats_for_season(season):
 
 all_seasons_merged_data = pd.DataFrame()
 
-for year in range(2018, 2024):
-    season = f"{year}-{str(year+1)[-2:]}" 
+for year in range(2017, 2023+1):
+    season = year
+    f"{year}-{str(year+1)[-2:]}" #as of 3/12/2024 NBA_API expects seaon= the start year
     print(f"Compiling stats for season: {season}")
     
     season_merged_stats = compile_and_merge_stats_for_season(season)
     all_seasons_merged_data = pd.concat([all_seasons_merged_data, season_merged_stats], ignore_index=True)
 
-csv_file_path = '../data/nba_players_compiled_stats_2018_2024.csv'
+csv_file_path = '../data/nba_players_compiled_stats_2017_2023.csv'
 all_seasons_merged_data.to_csv(csv_file_path, index=False)
